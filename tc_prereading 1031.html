@@ -1,0 +1,222 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wayfair Waste Management RFP — T&C Priority Review</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; font-size: 14px; color: #1a1a1a; background: #f5f5f5; }
+.page { max-width: 800px; margin: 0 auto; padding: 32px 24px; }
+.header { background: #1F3864; color: white; padding: 24px 32px; border-radius: 8px; margin-bottom: 24px; }
+.header h1 { font-size: 18px; font-weight: 600; margin-bottom: 6px; }
+.header p { font-size: 13px; opacity: 0.8; line-height: 1.5; }
+.instructions { background: #FFF8E1; border-left: 4px solid #F4B942; padding: 14px 18px; border-radius: 4px; margin-bottom: 24px; font-size: 13px; line-height: 1.6; }
+.instructions strong { font-weight: 600; }
+.theme-block { background: white; border-radius: 8px; border: 1px solid #e0e0e0; margin-bottom: 16px; overflow: hidden; }
+.theme-header { background: #1F3864; color: white; padding: 10px 20px; font-size: 12px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; }
+.trait-row { display: flex; align-items: center; gap: 16px; padding: 14px 20px; border-bottom: 1px solid #f0f0f0; }
+.trait-row:last-child { border-bottom: none; }
+.trait-label { flex: 1; font-size: 13px; line-height: 1.4; color: #1a1a1a; }
+.scale { display: flex; gap: 6px; flex-shrink: 0; align-items: center; }
+.scale label { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; }
+.scale input[type=radio] { display: none; }
+.scale-btn { width: 36px; height: 36px; border-radius: 50%; border: 2px solid #ddd; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; color: #888; cursor: pointer; transition: all 0.15s; background: #fafafa; }
+.scale input[type=radio]:checked + .scale-btn { border-color: #1F3864; background: #1F3864; color: white; }
+.scale-btn:hover { border-color: #2E75B6; color: #2E75B6; }
+.scale input[type=radio]:checked + .scale-btn:hover { background: #2E75B6; border-color: #2E75B6; color: white; }
+.scale-legends { display: flex; justify-content: space-between; font-size: 10px; color: #999; margin-top: 2px; min-width: 168px; }
+.scale-wrap { display: flex; flex-direction: column; gap: 2px; }
+.note-row { padding: 8px 20px 12px; }
+.note-row textarea { width: 100%; font-size: 12px; border: 1px solid #e0e0e0; border-radius: 4px; padding: 8px 10px; resize: vertical; min-height: 44px; color: #555; font-family: inherit; }
+.note-row textarea:focus { outline: none; border-color: #2E75B6; }
+.footer { margin-top: 24px; }
+.copy-btn { width: 100%; padding: 14px; background: #1F3864; color: white; border: none; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; letter-spacing: 0.02em; }
+.copy-btn:hover { background: #2E75B6; }
+.copy-btn:active { transform: scale(0.99); }
+.copied { background: #375623 !important; }
+.name-row { background: white; border-radius: 8px; border: 1px solid #e0e0e0; padding: 16px 20px; margin-bottom: 16px; display: flex; align-items: center; gap: 12px; }
+.name-row label { font-size: 13px; font-weight: 600; color: #1a1a1a; white-space: nowrap; }
+.name-row input { flex: 1; border: 1px solid #ddd; border-radius: 4px; padding: 8px 12px; font-size: 14px; font-family: inherit; }
+.name-row input:focus { outline: none; border-color: #2E75B6; }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="header">
+    <h1>Wayfair Waste Management RFP 2026 — T&C Priority Review</h1>
+    <p>Please rate the importance of each vendor trait to Wayfair's operations. Your input will be used to weight the T&C scorecard and identify deal breakers for the next negotiation round.</p>
+  </div>
+  <div class="instructions">
+    <strong>How to fill this out:</strong> Rate each trait from 0 to 3.<br>
+    <strong>0</strong> = Not important &nbsp;|&nbsp; <strong>1</strong> = Nice to have &nbsp;|&nbsp; <strong>2</strong> = Important &nbsp;|&nbsp; <strong>3</strong> = Must have — if a vendor can't do this, it's a deal breaker.<br>
+    Add notes if anything needs context. When done, click <strong>Copy results</strong> and paste into Slack or email to Jing.
+  </div>
+
+  <div class="name-row">
+    <label for="responder-name">Your name:</label>
+    <input type="text" id="responder-name" placeholder="e.g. Jason Gyorki">
+  </div>
+
+  <div id="form-container"></div>
+
+  <div class="footer">
+    <button class="copy-btn" onclick="copyResults()">Copy results → send to Jing</button>
+  </div>
+</div>
+
+<script>
+const themes = [
+
+  { name: "Equipment & lease", traits: [
+    "Willing to service existing third-party equipment on-site",
+    "Equipment handoff is fast and coordinated — low switching cost",
+    "Supports spotted trailers — no live-load dependency",
+  ]},
+  { name: "Contract terms", traits: [
+    "≤30-day written termination notice",
+    "No auto-renewal clause",
+    "Contract covers all 5 waste streams — not just trash",
+  ]},
+  { name: "Service quality", traits: [
+    "On-call managed by vendor — minimal Wayfair follow-up needed",
+    "Adapts to site-specific constraints (dock, space, hours)",
+    "Annual waste audit per site offered",
+  ]},
+  { name: "Data & reporting", traits: [
+    "Monthly weight + disposal method data at no extra cost",
+    "Data exportable — not portal-only",
+    "PSI monitor / automated pickup trigger supported",
+  ]},
+
+  { name: "Geographic coverage", traits: [
+    "Covers all 43 RFP sites without critical gaps",
+    "Franchise markets handled with price cap or protection mechanism",
+  ]},
+  { name: "Recycling coverage", traits: [
+    "All 5 streams serviced: Trash / Cardboard / Pallets / Metal / Mixed Recycling",
+    "Broken pallets and scrap wood accepted",
+    "Mixed recycling has a concrete program — not 'we'll figure it out'",
+  ]},
+  { name: "Thought partnership", traits: [
+    "Proactively suggests cost reduction opportunities",
+    "Provides benchmark data across comparable accounts",
+  ]},
+  { name: "Technical capabilities", traits: [
+    "PSI pressure monitor integration supported",
+    "Reporting API or automated data feed available",
+  ]},
+  { name: "Sustainability", traits: [
+    "Diversion rate tracking reported regularly",
+    "Third-party certification held (ISO 14001 / TRUE Zero Waste or equivalent)",
+  ]},
+];
+
+const state = {};
+let traitIndex = 0;
+
+const container = document.getElementById('form-container');
+
+themes.forEach((theme, ti) => {
+  const block = document.createElement('div');
+  block.className = 'theme-block';
+
+  const hdr = document.createElement('div');
+  hdr.className = 'theme-header';
+  hdr.textContent = theme.name;
+  block.appendChild(hdr);
+
+  theme.traits.forEach((trait, ri) => {
+    const key = `${ti}-${ri}`;
+    state[key] = { score: null, note: '' };
+
+    const row = document.createElement('div');
+    row.className = 'trait-row';
+
+    const label = document.createElement('div');
+    label.className = 'trait-label';
+    label.textContent = trait;
+
+    const scaleWrap = document.createElement('div');
+    scaleWrap.className = 'scale-wrap';
+
+    const scale = document.createElement('div');
+    scale.className = 'scale';
+
+    [0,1,2,3].forEach(v => {
+      const lbl = document.createElement('label');
+      const inp = document.createElement('input');
+      inp.type = 'radio';
+      inp.name = key;
+      inp.value = v;
+      inp.onchange = () => { state[key].score = v; };
+
+      const btn = document.createElement('div');
+      btn.className = 'scale-btn';
+      btn.textContent = v;
+
+      lbl.appendChild(inp);
+      lbl.appendChild(btn);
+      scale.appendChild(lbl);
+    });
+
+    const legends = document.createElement('div');
+    legends.className = 'scale-legends';
+    legends.innerHTML = '<span>Not imp.</span><span>Must have</span>';
+
+    scaleWrap.appendChild(scale);
+    scaleWrap.appendChild(legends);
+
+    row.appendChild(label);
+    row.appendChild(scaleWrap);
+    block.appendChild(row);
+
+    const noteRow = document.createElement('div');
+    noteRow.className = 'note-row';
+    const ta = document.createElement('textarea');
+    ta.placeholder = 'Notes (optional) — e.g. "We need vendors to have X specifically"';
+    ta.oninput = () => { state[key].note = ta.value; };
+    noteRow.appendChild(ta);
+    block.appendChild(noteRow);
+  });
+
+  container.appendChild(block);
+});
+
+function copyResults() {
+  const name = document.getElementById('responder-name').value.trim() || 'Anonymous';
+  let lines = [`T&C Priority Input — ${name}\n`];
+  let missing = [];
+
+  themes.forEach((theme, ti) => {
+    lines.push(`\n${theme.name.toUpperCase()}`);
+    theme.traits.forEach((trait, ri) => {
+      const key = `${ti}-${ri}`;
+      const s = state[key];
+      if (s.score === null) missing.push(trait.slice(0, 40));
+      const score = s.score !== null ? s.score : '—';
+      const db = s.score === 3 ? ' [DEAL BREAKER]' : '';
+      const note = s.note ? `\n     Note: ${s.note}` : '';
+      lines.push(`  [${score}] ${trait}${db}${note}`);
+    });
+  });
+
+  if (missing.length > 0) {
+    const ok = confirm(`${missing.length} trait(s) not yet rated. Copy anyway?`);
+    if (!ok) return;
+  }
+
+  navigator.clipboard.writeText(lines.join('\n')).then(() => {
+    const btn = document.querySelector('.copy-btn');
+    btn.textContent = 'Copied ✓';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.textContent = 'Copy results → send to Jing';
+      btn.classList.remove('copied');
+    }, 2500);
+  });
+}
+</script>
+</body>
+</html>
